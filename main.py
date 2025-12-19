@@ -1,9 +1,6 @@
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import re
-
-# Security: simple API key
-API_KEY = "YOUR_SECRET_KEY"
 
 app = FastAPI(title="Lead Parser API")
 
@@ -54,11 +51,7 @@ keys = [
 
 # POST /parse endpoint
 @app.post("/parse")
-def parse_lead(data: LeadInput, x_api_key: str = Header(...)):
-    # Validate API key
-    if x_api_key != API_KEY:
-        raise HTTPException(status_code=403, detail="Forbidden")
-
+def parse_lead(data: LeadInput):
     # Match regex
     match = pattern.search(data.text)
     if not match:
