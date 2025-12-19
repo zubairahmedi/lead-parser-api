@@ -26,7 +26,7 @@ pattern = re.compile(
     r"Timeframe to Start Business:\s*([^\r\n]+)\s*"
     r"Liquid Capital to Invest:\s*([^\r\n]+)\s*"
     r"Net Worth.*:\s*([^\r\n]+)\s*"
-    r"Comments:\s*([\s\S]+)"
+    r"Comments:\s*((?:(?!\[image:)(?!Email tracked)(?!\n\n\n)[\s\S])*?)\s*(?:\n\n|\[image:|Email tracked|$)"
 )
 
 keys = [
