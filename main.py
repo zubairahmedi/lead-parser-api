@@ -26,7 +26,8 @@ pattern = re.compile(
     r"Timeframe to Start Business:\s*([^\r\n]+)\s*"
     r"Liquid Capital to Invest:\s*([^\r\n]+)\s*"
     r"Net Worth.*:\s*([^\r\n]+)\s*"
-    r"Comments:\s*((?:(?!\[image:)(?!Email tracked)(?!\n\n\n)[\s\S])*?)\s*(?:\n\n|\[image:|Email tracked|$)"
+    r"Comments:\s*([\s\S]*?)(?=\n\n(?:On\s|zubair|>)|\Z)",
+    re.MULTILINE
 )
 
 keys = [
@@ -58,7 +59,13 @@ def parse_lead(data: LeadInput):
         return {"error": "Invalid lead format"}
 
     # Convert to JSON
-    return dict(zip(keys, match.groups()))
+    result = dict(zip(keys, match.groups()))
+    
+    # Strip trailing whitespace from comments
+    if 'comments' in result:
+        result['comments'] = result['comments'].strip()
+    
+    return result
 
 # Health check endpoint
 @app.get("/health")
